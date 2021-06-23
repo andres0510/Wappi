@@ -6,7 +6,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
     features = "src/main/resources/features",
     glue = {"com/wappi/test/steps/"},
-    plugin = {"pretty", "html:target/cucumber", "json:target/prueba.json"}
+    plugin = {"pretty", "html:target/cucumber", "json:target/personalinfo.json"},
+    tags = {"@PersonalInfo"}
 )
-public class TestRunnerPrueba {
+public class TestRunnerPersonalInfo {
 }
