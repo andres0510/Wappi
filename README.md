@@ -19,4 +19,14 @@ Julian Andres Quiroz Taborda
 ----- TECNOLOGÍAS UTILIZADAS ----------------------------
 ---------------------------------------------------------
 
-Por definir
+IDE IntelliJ IDEA Community 2020.2
+
+Google Chrome 91.0.4472.114
+ChromeDriver 91.0.4472.101
+
+Java 1.8
+Selenium WebDriver 3.141.59
+
+Gradle 6.3
+
+Cucumber 4.2.0
