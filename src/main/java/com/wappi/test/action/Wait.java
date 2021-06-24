@@ -1,6 +1,7 @@
 package com.wappi.test.action;
 
 import com.wappi.test.helpers.Report;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Wait {
 
     private static WebDriverWait wait;
-    private static final int DEFAULT_TIMEOUT = 30;
+    private static final int DEFAULT_TIMEOUT = 10;
     private static final String ERROR_MSG = "Error waiting for element: %s";
 
     private Wait(){}
@@ -35,6 +36,14 @@ public class Wait {
             wait.until(ExpectedConditions.visibilityOf(element));
         } catch (Exception e) {
             Report.reportFail(String.format(ERROR_MSG, e.getMessage()));
+        }
+    }
+
+    public static void forElementDisplayed(WebElement element) throws NoSuchElementException {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(element));
+        } catch (Exception e) {
+            throw new NoSuchElementException(String.format(ERROR_MSG, e.getMessage()));
         }
     }
 

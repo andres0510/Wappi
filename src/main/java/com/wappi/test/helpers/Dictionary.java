@@ -1,5 +1,8 @@
 package com.wappi.test.helpers;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Dictionary {
 
     private Dictionary(){}
@@ -7,6 +10,18 @@ public class Dictionary {
     public static class PropertiesPath {
         private PropertiesPath(){}
         public static final String DEFAULT = "src/main/resources/properties/configuration.properties";
+    }
+
+    public static class FilesPath {
+        private FilesPath(){}
+        public static final String AVATAR = String.format("%s\\src\\main\\resources\\files\\wappi.png", System.getProperty("user.dir"));
+    }
+
+    public static class Messages {
+        private Messages(){}
+        public static final String SUCCESS = "[SUCCESS] - %s";
+        public static final String INFO = "[INFO] - %s";
+        public static final String FAIL = "[FAIL] - %s";
     }
 
     public static class OSName {
@@ -20,17 +35,31 @@ public class Dictionary {
     public static class DateFormat {
         private DateFormat(){}
         public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH-mm-ss";
+        public static final String DD_MM_YYYY = "dd/MM/yyyy";
     }
 
-    public static void main(String[] args) {
-        try {
-            Report.initReport();
-            Report.reportInfo("Hola");
-            Thread.sleep(5000);
-            Report.reportInfo("2");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public static class Country {
+        private Country(){}
+        public static final String DEFAULT_COUNTRY_OPTION = "Seleccionar";
+        private static final List<String> countries = Arrays.asList("Argentina", "Colombia", "Estados Unidos");
+        public static List<String> getCountries(){ return countries; }
+    }
+
+    public static class Gender {
+        private Gender(){}
+        public static final String MASCULINO = "Masculino";
+        public static final String FEMENINO = "Femenino";
+        private static final List<String> genders = Arrays.asList(MASCULINO, FEMENINO);
+        public static List<String> getGenders(){ return genders; }
+    }
+
+    public static class MissingInfo {
+        private MissingInfo(){}
+        public static final String AVATAR = "avatar";
+        public static final String FIRSTNAME = "firstname";
+        public static final String LASTNAME = "lastname";
+        public static final String BIRTHDATE = "birthdate";
+        public static final String COUNTRY = "country";
     }
 
 }
