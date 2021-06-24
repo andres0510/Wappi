@@ -30,3 +30,12 @@ Selenium WebDriver 3.141.59
 Gradle 6.3
 
 Cucumber 4.2.0
+
+---------------------------------------------------------
+----- RUNNING TESTS -------------------------------------
+---------------------------------------------------------
+
+Personal info: TestRunnerPersonalInfo
+Shopping: TestRunnerShopping
+
+./gradlew test --tests {TestRunner}
