@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
     features = "src/main/resources/features",
     glue = {"com/wappi/test/steps/"},
     plugin = {"pretty", "html:target/cucumber", "json:target/shopping.json"},
-    tags = {"@ShoppingWithCoupon", "@ShoppingWithoutCoupon"}
+    tags = {"@Shopping"}
 )
 public class TestRunnerShopping {
 }

@@ -1,17 +1,23 @@
 package com.wappi.test.dto;
 
+import com.github.javafaker.Faker;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
 
     private String user;
     private String password;
-    private List<Coupon> coupons;
+    private Coupon coupon;
     private List<Order> orders;
 
     public Client(){
-        user = "andres";
-        password = "12345678";
+        Faker faker = new Faker();
+        user = faker.name().firstName();
+        password = faker.number().digits(8);
+        coupon = new Coupon(faker.number().digits(10));
+        orders = new ArrayList<>();
     }
 
     public String getUser() {
@@ -22,12 +28,20 @@ public class Client {
         return password;
     }
 
-    public List<Coupon> getCoupons() {
-        return coupons;
+    public Coupon getCoupon() {
+        return coupon;
     }
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
     }
 
 }

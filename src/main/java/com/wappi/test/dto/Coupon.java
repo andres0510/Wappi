@@ -1,5 +1,8 @@
 package com.wappi.test.dto;
 
+import com.wappi.test.helpers.Dictionary;
+import com.wappi.test.helpers.PropertiesFile;
+
 public class Coupon {
 
     private String code;
@@ -7,23 +10,37 @@ public class Coupon {
     private String description;
     private int uses;
 
-    public Coupon(String code, String expireDate, String description, int uses) {
+    public Coupon(){
+    }
+
+    public Coupon(String code){
         this.code = code;
-        this.expireDate = expireDate;
-        this.description = description;
-        this.uses = uses;
+        PropertiesFile properties = new PropertiesFile(Dictionary.PropertiesPath.DEFAULT);
+        this.uses = Integer.parseInt(properties.getProperty("defult.coupon.uses"));
     }
 
     public String getCode() {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getExpireDate() {
         return expireDate;
     }
 
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getUses() {

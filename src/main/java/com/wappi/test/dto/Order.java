@@ -1,5 +1,7 @@
 package com.wappi.test.dto;
 
+import java.util.Objects;
+
 public class Order {
 
     private String date;
@@ -66,4 +68,22 @@ public class Order {
         this.couponUsed = couponUsed;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return couponUsed == order.couponUsed &&
+                Objects.equals(date, order.date) &&
+                Objects.equals(description, order.description) &&
+                Objects.equals(price, order.price) &&
+                Objects.equals(delivery, order.delivery) &&
+                Objects.equals(shop, order.shop) &&
+                Objects.equals(address, order.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, description, price, delivery, shop, address, couponUsed);
+    }
 }

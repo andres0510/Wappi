@@ -35,7 +35,7 @@ public class Utilities {
         return object;
     }
 
-    private static int selectRandomValue(int min, int max) {
+    public static int selectRandomValue(int min, int max) {
         return new Faker().number().numberBetween(min, max);
     }
 

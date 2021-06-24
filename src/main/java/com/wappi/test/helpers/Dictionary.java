@@ -20,8 +20,9 @@ public class Dictionary {
     public static class Messages {
         private Messages(){}
         public static final String SUCCESS = "[SUCCESS] - %s";
-        public static final String INFO = "[INFO] - %s";
-        public static final String FAIL = "[FAIL] - %s";
+        public static final String COMPARE = "[COMPARE] - Expected: %s - Found: %s";
+        public static final String CONFIRMATION_MODAL_VISIBLE = "Confirmation modal is visible";
+        public static final String CONFIRMATION_MODAL_NOT_VISIBLE = "Confirmation modal is not visible";
     }
 
     public static class OSName {

@@ -3,13 +3,16 @@ package com.wappi.test.controller;
 import com.github.javafaker.Faker;
 import com.wappi.test.action.DriverManager;
 import com.wappi.test.dto.Client;
+import com.wappi.test.dto.Coupon;
+import com.wappi.test.dto.Order;
 import com.wappi.test.helpers.Dictionary;
 import com.wappi.test.helpers.PropertiesFile;
 import com.wappi.test.helpers.Report;
 import com.wappi.test.helpers.Utilities;
-import com.wappi.test.page.PageHome;
-import com.wappi.test.page.PageLogin;
-import com.wappi.test.page.PagePersonalInfo;
+import com.wappi.test.page.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WappiController {
 
@@ -105,7 +108,7 @@ public class WappiController {
         Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Delete missing personal info from form"));
     }
 
-    public static boolean validateConfirmationModal() {
+    public static boolean validateConfirmationModalForInfoUpdate() {
         PagePersonalInfo pagePersonalInfo = new PagePersonalInfo();
         return pagePersonalInfo.isVisibleConfirmationModal();
     }
@@ -130,15 +133,157 @@ public class WappiController {
     }
 
     //----------------------------------------------------------------------------------------------------------------->
-    //----------------------------------------------------------------------------------------------------------------->
+    //---------- SHOPPING --------------------------------------------------------------------------------------------->
     //----------------------------------------------------------------------------------------------------------------->
 
-    public static void wait2() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public static Order buyArticle(boolean useCoupon, Coupon coupon) {
+        PageHome pageHome = new PageHome();
+        Order tableOrder = selectRandomOffer(pageHome);
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Select random offer from table"));
+        tableOrder.setCouponUsed(useCoupon);
+        Order modalOrder = getOfferInfoFromModal(pageHome);
+        modalOrder.setCouponUsed(useCoupon);
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Get offer info from modal"));
+        DataController.compareOrders(tableOrder, modalOrder);
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Compare table offer vs modal offer"));
+        if (useCoupon) {
+            pageHome.writeCoupon(coupon.getCode());
         }
+        pageHome.clickConfirmOrder();
+        return modalOrder;
+    }
+
+    private static void goToHomeView() {
+        PageHome pageHome = new PageHome();
+        pageHome.clickTabHome();
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Enter to home view"));
+    }
+
+    private static Order selectRandomOffer(PageHome pageHome) {
+        Order order = new Order();
+        int offersCount = pageHome.getOffersCount();
+        if (offersCount>0) {
+            int index = Utilities.selectRandomValue(0, offersCount);
+            order.setDate(pageHome.getOfferDateAtIndex(index));
+            order.setDescription(pageHome.getOfferDescriptionAtIndex(index));
+            order.setPrice(pageHome.getOfferPriceAtIndex(index));
+            order.setDelivery(pageHome.getOfferDeliveryAtIndex(index));
+            order.setShop(pageHome.getOfferStoreAtIndex(index));
+            order.setAddress(pageHome.getOfferAddressAtIndex(index));
+            pageHome.clickOrderAtIndex(index);
+        } else {
+            Report.reportFail("There are not offers to order");
+        }
+        return order;
+    }
+
+    private static Order getOfferInfoFromModal(PageHome pageHome) {
+        Order order = new Order();
+        order.setDescription(pageHome.getOfferDescriptionInModal());
+        order.setPrice(pageHome.getOfferPriceInModal());
+        String date = pageHome.getOfferDateInModal().split("\n")[1];
+        order.setDate(date);
+        String delivery = pageHome.getOfferDeliveryInModal().split("\n")[1];
+        order.setDelivery(delivery);
+        String shop = pageHome.getOfferStoreInModal().split("\n")[1];
+        order.setShop(shop);
+        String address = pageHome.getOfferAddressInModal().split("\n")[1];
+        order.setAddress(address);
+        return order;
+    }
+
+    public static boolean validateConfirmationModalForOrder(){
+        PageHome pageHome = new PageHome();
+        boolean modalVisible = pageHome.isVisibleConfirmationModal();
+        pageHome.clickCloseConfirmationModal();
+        return modalVisible;
+    }
+
+    public static void validateErrorBuyingArticle(){
+        PageHome pageHome = new PageHome();
+        if (!pageHome.isVisibleCouponError()) {
+            Report.reportFail("Coupon warning was not displayed");
+        }
+        pageHome.clickCloseOfferModal();
+    }
+
+    //----------------------------------------------------------------------------------------------------------------->
+    //---------- HISTORY ---------------------------------------------------------------------------------------------->
+    //----------------------------------------------------------------------------------------------------------------->
+
+    public static List<Order> getMyOrders() {
+        PageHome pageHome = new PageHome();
+        pageHome.clickTabMyOrders();
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Enter to my orders view"));
+        PageMyOrders pageMyOrders = new PageMyOrders();
+        int ordersCount = pageMyOrders.getOrdersCount();
+        List<Order> orders = new ArrayList<>();
+        for (int i=0; i<ordersCount; i++) {
+            orders.add(getOrderAtIndex(pageMyOrders, i));
+        }
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Get orders history"));
+        goToHomeView();
+        return orders;
+    }
+
+    private static Order getOrderAtIndex(PageMyOrders pageMyOrders, int index) {
+        Order order = new Order();
+        order.setDate(pageMyOrders.getOrderDateAtIndex(index));
+        order.setDescription(pageMyOrders.getOrderDescriptionAtIndex(index));
+        order.setPrice(pageMyOrders.getOrderPriceAtIndex(index));
+        order.setDelivery(pageMyOrders.getOrderDeliveryAtIndex(index));
+        order.setShop(pageMyOrders.getOrderStoreAtIndex(index));
+        order.setAddress(pageMyOrders.getOrderAddressAtIndex(index));
+        String couponUsed = pageMyOrders.getOrderCouponUsedAtIndex(index);
+        order.setCouponUsed(couponUsed.equalsIgnoreCase("Si"));
+        return order;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------->
+    //---------- COUPONS ---------------------------------------------------------------------------------------------->
+    //----------------------------------------------------------------------------------------------------------------->
+
+    public static Coupon claimWelcomeCoupon(){
+        PageHome pageHome = new PageHome();
+        pageHome.clickGetWelcomeCoupon();
+        String couponCode = pageHome.getCouponCode();
+        pageHome.clickCloseCouponModal();
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Claim welcome coupon"));
+        return new Coupon(couponCode);
+    }
+
+    public static List<Coupon> getMyCoupons() {
+        goToCouponsView();
+        PageCoupons pageCoupons = new PageCoupons();
+        int couponsCount = pageCoupons.getCouponsCount();
+        List<Coupon> coupons = new ArrayList<>();
+        for (int i=0; i<couponsCount; i++) {
+            coupons.add(getCouponAtIndex(pageCoupons, i));
+        }
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Get coupons list"));
+        goToHomeView();
+        return coupons;
+    }
+
+    public static boolean validateNoNewCupons(){
+        PageHome pageHome = new PageHome();
+        return pageHome.isVisibleButtonWelcomeCupoun();
+    }
+
+    private static void goToCouponsView() {
+        PageHome pageHome = new PageHome();
+        pageHome.clickTabCoupons();
+        Report.reportInfo(String.format(Dictionary.Messages.SUCCESS, "Enter to coupons view"));
+    }
+
+    private static Coupon getCouponAtIndex(PageCoupons pageCoupons, int index) {
+        Coupon coupon = new Coupon();
+        coupon.setCode(pageCoupons.getCouponCode(index));
+        coupon.setExpireDate(pageCoupons.getCouponExpireDate(index));
+        coupon.setDescription(pageCoupons.getCouponDescription(index));
+        int uses = Integer.parseInt(pageCoupons.getCouponUses(index));
+        coupon.setUses(uses);
+        return coupon;
     }
 
 }
