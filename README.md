@@ -1,22 +1,22 @@
 ---------------------------------------------------------
------ EJERCICIO TÉCNICO WAPPI ---------------------------
+----- AUTOMATION CHALLENGE WAPPI ------------------------
 ---------------------------------------------------------
 
-Wappi es una aplicación que se encarga del delivery de comidas. Dentro de la misma podemos encontrar las siguientes vistas:
-* Login, para ingresar a nuestra aplicación
-* Inicio, con un listado de los productos a pedir
-* Cupones, con un listado de los cupones obtenidos
-* Mis Pedidos, con un listado de los pedidos realizados por el usuario
-* Información personal, para actualizar toda la información del perfil correspondiente
+Wappi is an food delivery application. Inside, we can see the following views:
+* Login, for enter to our application
+* Home, with a list of products to order
+* Coupons, with a list of claimed coupons
+* My orders, with a list of orders made by user
+* Personal information, to update profile personal info
 
 ---------------------------------------------------------
------ AUTOR ---------------------------------------------
+----- AUTHOR --------------------------------------------
 ---------------------------------------------------------
 
 Julian Andres Quiroz Taborda
 
 ---------------------------------------------------------
------ TECNOLOGÍAS UTILIZADAS ----------------------------
+----- USED TECHNOLOGIES ---------------------------------
 ---------------------------------------------------------
 
 IDE IntelliJ IDEA Community 2020.2
