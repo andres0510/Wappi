@@ -14,8 +14,8 @@ public class Client {
 
     public Client(){
         Faker faker = new Faker();
-        user = faker.name().firstName();
-        password = faker.number().digits(8);
+        user = faker.lorem().characters(6, 20);
+        password = faker.lorem().characters(8, 14);
         coupon = new Coupon(faker.number().digits(10));
         orders = new ArrayList<>();
     }

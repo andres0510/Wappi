@@ -17,16 +17,16 @@ public class PageHome {
     //---------- LOCATORS --------------------------------------------------------------------------------------------->
     //----------------------------------------------------------------------------------------------------------------->
 
-    @FindBy(xpath = "//li/a[text()='Inicio']")
+    @FindBy(xpath = "//a[contains(@href,'/home')]")
     private WebElement tabHome;
 
-    @FindBy(xpath = "//li/a[text()='Cupones']")
+    @FindBy(xpath = "//a[contains(@href,'/coupons')]")
     private WebElement tabCoupons;
 
-    @FindBy(xpath = "//li/a[text()='Mis pedidos']")
+    @FindBy(xpath = "//a[contains(@href,'/orders')]")
     private WebElement tabMyOrders;
 
-    @FindBy(xpath = "//li/a[text()='Información personal']")
+    @FindBy(xpath = "//a[contains(@href,'/profile')]")
     private WebElement tabPersonalInfo;
 
     @FindBy(id = "welcome-coupon")
